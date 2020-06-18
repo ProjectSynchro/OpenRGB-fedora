@@ -23,10 +23,10 @@ The i2c-piix4 kernel driver, patched to be used with OpenRGB: https://gitlab.com
 %prep
 mkdir -p "%{_sourcedir}/%{name}" && cd "%{_sourcedir}/%{name}"
 
-cp ../dkms.conf ../Makefile .
-cp ../i2c-piix4.c i2c-piix4.c
+cp %{_sourcedir}/dkms.conf %{_sourcedir}/Makefile .
+cp %{_sourcedir}/i2c-piix4.c i2c-piix4.c
 
-patch --no-backup-if-mismatch -Np4 < ../piix4.patch
+patch --no-backup-if-mismatch -Np4 < %{_sourcedir}/piix4.patch
 
 %install
 # Copy dkms.conf
@@ -83,8 +83,7 @@ echo -e "Uninstall of %{name} module (version %{version}) beginning:"
 dkms remove -m %{name} -v %{version} --all --rpm_safe_upgrade
 exit 0
 
-%changelog
+## Changelog (Because apparently this isn't the right syntax)
 
-* Thu June 18 2020 Jack Greiner <jack@emoss.org> - 5.6.11-1%{?dist}
-
-- Initial RPM release
+#* Fri June 18 2020 Jack Greiner <jack@emoss.org>  - 5.6.11-1%{?dist}
+#- Initial RPM release
