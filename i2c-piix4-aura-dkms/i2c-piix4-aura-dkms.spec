@@ -9,12 +9,13 @@ Version:        %{version}
 Release:        1%{?dist}
 Summary:        The i2c-piix4 kernel driver, patched to be used with OpenRGB: https://gitlab.com/CalcProgrammer1/OpenRGB
 
-Group: System Environment/Kernel
-License: GPLv2
-URL: https://bugzilla.kernel.org/show_bug.cgi?id=202587
+Group:          System Environment/Kernel
+License:        GPLv2
+URL:            https://bugzilla.kernel.org/show_bug.cgi?id=202587
+Source0:        %{name}-%{version}.tar.gz
 
-Requires: dkms >= 1.00
-Requires: bash
+Requires:       dkms >= 1.00
+Requires:       bash
 
 %description
 The i2c-piix4 kernel driver, patched to be used with OpenRGB: https://gitlab.com/CalcProgrammer1/OpenRGB
