@@ -21,12 +21,17 @@ Requires:       bash
 The i2c-piix4 kernel driver, patched to be used with OpenRGB: https://gitlab.com/CalcProgrammer1/OpenRGB
 
 %prep
-mkdir -p "%{_sourcedir}/%{name}" && cd "%{_sourcedir}/%{name}"
+%autosetup
 
-cp %{_sourcedir}/dkms.conf %{_sourcedir}/Makefile .
-cp %{_sourcedir}/i2c-piix4.c i2c-piix4.c
+mkdir -p "%{_builddir}/%{name}"
 
-patch --no-backup-if-mismatch -Np4 < %{_sourcedir}/piix4.patch
+cp dkms.conf %{_builddir}/%{name}
+cp Makefile %{_builddir}/%{name}
+patch --no-backup-if-mismatch -Np4 < piix4.patch
+cp i2c-piix4.c %{_builddir}/%{name}
+
+cp 90-i2c-aura.rules %{_builddir}
+cp i2c-aura.conf %{_builddir}
 
 %install
 # Copy dkms.conf
@@ -38,13 +43,13 @@ sed -e "s/@_PKGBASE@/%{name}/" \
     -i "%{buildroot}/usr/src/%{name}-%{version}/dkms.conf"
     
 # Copy sources (including Makefile)
-cp -r %{_sourcedir}/%{name}/{i2c-piix4.c,Makefile} %{buildroot}/usr/src/%{name}-%{version}/
+cp -r %{_builddir}/%{name}/{i2c-piix4.c,Makefile} %{buildroot}/usr/src/%{name}-%{version}/
 
 # udev rule to alow users part of the 'wheel' group to access i2c without root privileges
-install -Dm644 %{_sourcedir}/90-i2c-aura.rules %{buildroot}/etc/udev/rules.d/90-i2c-aura.rules
+install -Dm644 %{_builddir}/90-i2c-aura.rules %{buildroot}/etc/udev/rules.d/90-i2c-aura.rules
 
 # modprobe needed modules at boot
-install -Dm644 %{_sourcedir}/i2c-aura.conf %{buildroot}/etc/modules-load.d/i2c-aura.conf
+install -Dm644 %{_builddir}/i2c-aura.conf %{buildroot}/etc/modules-load.d/i2c-aura.conf
 
 %clean
 if [ "$RPM_BUILD_ROOT" != "/" ]; then
